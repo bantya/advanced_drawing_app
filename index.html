@@ -6,31 +6,27 @@
    </head>
    <body>
       <canvas id="myCanvas"></canvas><canvas id="hitTestCanvas"></canvas>
-      <div id="toolBox">
-         <label for="toolSelector">Tool:</label>
-         <select id="toolSelector" name="toolSelector" onchange="changeTool(this.value)">
-            <option value="path" selected>Path</option>
-            <option value="rect">Rect</option>
-            <option value="oval">Oval</option>
-            <option value="text">Text</option>
-            <option value="select">Select</option>
-         </select>
-         
-         <hr/>
-         
-         <button onclick="save()">Save</button>
-         <button onclick="load()">Load</button>
-         <button onclick="do_import()" style="display:none;">Import</button>
-         <button onclick="do_export()">Export</button>
-         
-         <hr/>
-         
-         <button onclick="undo()">Undo</button>
-         <button onclick="redo()">Redo</button>
-         
-         <hr/>
-         
-         <div id="propertiesHolder"></div>
+      <div class="container">
+         <div class="top-menu">
+            <img src="" alt="Logo">
+            <button onclick="save()">Save</button>
+            <button onclick="load()">Load</button>
+            <button onclick="do_import()" style="display:none;">Import</button>
+            <button onclick="do_export()">Export</button>
+            <span>|</span>
+            <button onclick="undo()">Undo</button>
+            <button onclick="redo()">Redo</button>
+         </div>
+         <div class="tools-box">
+            <button onclick="changeTool('path')">Path</button>
+            <button onclick="changeTool('rect')">Rect</button>
+            <button onclick="changeTool('oval')">Oval</button>
+            <button onclick="changeTool('text')">Text</b>
+            <button onclick="changeTool('select')">Select</b>
+         </div>
+         <div class="properties-box">
+            <div id="propertiesHolder"></div>
+         </div>
       </div>
       <script src="utils/vector.js"></script>
       <script src="utils/boundingBox.js"></script>

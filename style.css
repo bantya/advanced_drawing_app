@@ -1,14 +1,43 @@
-canvas {
-}
+canvas {}
+
 body {
    margin: 0;
    overflow: hidden;
    box-sizing: border-box;
    user-select: none;
 }
+
 #toolBox {
    position: absolute;
    top: 0px;
    left: 0px;
    margin: 5px;
+}
+
+.container > * {
+   padding: 6px;
+}
+
+.container .top-menu {
+   width: 100vw;
+   height: 40px;
+   top: 0;
+   left: 0;
+   position: fixed;
+}
+
+.container .tools-box {
+   width: 40px;
+   height: calc(100vw - 40px);
+   top: 40px;
+   left: 0;
+   position: fixed;
+}
+
+.container .properties-box {
+   width: 200px;
+   height: calc(100vw - 40px);
+   right: 0;
+   top: 40px;
+   position: fixed;
 }
