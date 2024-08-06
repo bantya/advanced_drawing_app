@@ -81,18 +81,26 @@ function changeTool(tool) {
 
    switch (tool) {
       case "rect":
+         myCanvas.style.cursor =
+				"url(./assets/tools/draw-rect.svg) 12 12, crosshair";
          myCanvas.addEventListener("pointerdown", Rect.addPointerDownListener);
          break;
       case "path":
+         myCanvas.style.cursor =
+				"url(./assets/tools/draw-path.svg) 12 12, crosshair";
          myCanvas.addEventListener("pointerdown", Path.addPointerDownListener);
          break;
       case "oval":
+         myCanvas.style.cursor =
+				"url(./assets/tools/draw-oval.svg) 12 12, crosshair";
          myCanvas.addEventListener("pointerdown", Oval.addPointerDownListener);
          break;
       case "text":
+         myCanvas.style.cursor = "text";
          myCanvas.addEventListener("pointerdown", Text.addPointerDownListener);
          break;
       case "select":
+         myCanvas.style.cursor = "default";
          myCanvas.addEventListener("pointerdown", downCallbackForSelect);
          break;
    }

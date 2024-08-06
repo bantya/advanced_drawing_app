@@ -119,12 +119,12 @@ class Shape {
 
 function deleteSelectedShapes() {
    let index = shapes.findIndex((s) => s.selected);
-   let shoulUpdateHistory = index !== -1;
+   let shouldUpdateHistory = index !== -1;
    while (index != -1) {
       shapes.splice(index, 1);
       index = shapes.findIndex((s) => s.selected);
    }
-   if (shoulUpdateHistory) {
+   if (shouldUpdateHistory) {
       updateHistory(shapes);
    }
    PropertiesPanel.reset();
