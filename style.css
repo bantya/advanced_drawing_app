@@ -19,6 +19,8 @@ body {
 }
 
 .container .top-menu {
+   display: flex;
+   align-items: center;
    width: 100vw;
    height: 40px;
    top: 0;
@@ -40,4 +42,18 @@ body {
    right: 0;
    top: 40px;
    position: fixed;
+}
+
+.container button {
+   cursor: pointer;
+   width: 36px;
+   height: 36px;
+}
+
+.container img {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 20px;
+   height: 20px;
 }

@@ -8,21 +8,20 @@
       <canvas id="myCanvas"></canvas><canvas id="hitTestCanvas"></canvas>
       <div class="container">
          <div class="top-menu">
-            <img src="" alt="Logo">
-            <button onclick="save()">Save</button>
-            <button onclick="load()">Load</button>
-            <button onclick="do_import()" style="display:none;">Import</button>
-            <button onclick="do_export()">Export</button>
+            <button onclick="save()" title="Save"><img src="./assets/menus/save.svg" alt="Save"></button>
+            <button onclick="load()" title="Load"><img src="./assets/menus/load.svg" alt="Load"></button>
+            <button onclick="do_import()" title="Import" style="display:none;"><img src="./assets/menus/import.svg" alt="Import"></button>
+            <button onclick="do_export()" title="Export"><img src="./assets/menus/export.svg" alt="Export"></button>
             <span>|</span>
-            <button onclick="undo()">Undo</button>
-            <button onclick="redo()">Redo</button>
+            <button onclick="undo()" title="Undo"><img src="./assets/menus/undo.svg" alt="Undo"></button>
+            <button onclick="redo()" title="Redo"><img src="./assets/menus/redo.svg" alt="Redo"></button>
          </div>
          <div class="tools-box">
-            <button onclick="changeTool('path')">Path</button>
-            <button onclick="changeTool('rect')">Rect</button>
-            <button onclick="changeTool('oval')">Oval</button>
-            <button onclick="changeTool('text')">Text</b>
-            <button onclick="changeTool('select')">Select</b>
+            <button onclick="changeTool('path')" title="Path (p)"><img src="./assets/tools/path.svg" alt="Path"></button>
+            <button onclick="changeTool('rect')" title="Rect (r)"><img src="./assets/tools/rect.svg" alt="Rect"></button>
+            <button onclick="changeTool('oval')" title="Oval (o)"><img src="./assets/tools/oval.svg" alt="Oval"></button>
+            <button onclick="changeTool('text')" title="Text (t)"><img src="./assets/tools/text.svg" alt="Text"></b>
+            <button onclick="changeTool('select')" title="Select (v)"><img src="./assets/tools/select.svg" alt="Select"></b>
          </div>
          <div class="properties-box">
             <div id="propertiesHolder"></div>
