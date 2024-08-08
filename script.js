@@ -87,7 +87,7 @@ function changeTool(tool) {
          break;
       case "path":
          myCanvas.style.cursor =
-				"url(./assets/tools/draw-path.svg) 12 12, crosshair";
+				"url(./assets/tools/pen.svg) 12 12, crosshair";
          myCanvas.addEventListener("pointerdown", Path.addPointerDownListener);
          break;
       case "oval":
