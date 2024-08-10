@@ -132,7 +132,7 @@ class PropertiesPanel {
 				oninput: "PropertiesPanel.previewStrokeWidth(this.value)",
 				title: "Stroke Width",
 				type: "range",
-				value: "5",
+				value: "1",
 			})
 		);
 		textSection.appendChild(

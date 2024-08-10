@@ -145,6 +145,7 @@ class ToolsPanel {
 	}
 
 	#selectToolComponent(tool) {
+		myCanvas.style.cursor = tool.cursor;
 		document.getElementById(tool.name.toLowerCase() + "Radio").checked = true;
 	}
 }

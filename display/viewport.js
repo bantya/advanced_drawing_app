@@ -156,5 +156,46 @@ class Viewport {
 				this.canvas.addEventListener("pointerup", upCallback);
 			}
 		});
+
+		this.canvas.addEventListener("mousemove", (event) => {
+			const rect = this.canvas.getBoundingClientRect();
+			const mouseX = event.clientX - (rect.width - STAGE_PROPERTIES.width) / 2 - rect.left;
+			const mouseY = event.clientY - (rect.height - STAGE_PROPERTIES.height) / 2 - rect.top;
+
+			let cursor = Cursor.DEFAULT;
+
+			if (ShapeTools.cursor != Cursor.DEFAULT) {
+				cursor = ShapeTools.cursor;
+			}
+
+			gizmos.forEach(gizmo => {
+				const gizmoX = STAGE_PROPERTIES.width / 2 + gizmo.center.x - gizmo.box.width / 2;
+				const gizmoY = STAGE_PROPERTIES.height / 2 + gizmo.center.y - gizmo.box.height / 2;
+
+				if(isMouseOverItem(mouseX, mouseY, gizmoX, gizmoY, gizmo.box.width, gizmo.box.height)) {
+					cursor = Cursor.MOVE;
+				}
+
+				gizmo.handles.forEach(handle => {
+					const handleX = STAGE_PROPERTIES.width / 2 + handle.center.x - Handle.size / 2;
+					const handleY = STAGE_PROPERTIES.height / 2 + handle.center.y - Handle.size / 2;
+
+					if(isMouseOverItem(mouseX, mouseY, handleX, handleY, Handle.size, Handle.size)) {
+						cursor = Handle.getCursor(handle.type);
+					}
+				});
+			});
+
+			shapes.forEach((item) => {
+				const itemX = STAGE_PROPERTIES.width / 2 + item.center.x - item.size.width / 2;
+				const itemY = STAGE_PROPERTIES.height / 2 + item.center.y - item.size.height / 2;
+
+				if (isMouseOverItem(mouseX, mouseY, itemX, itemY, item.size.width, item.size.height)) {
+					// TODO
+				}
+			});
+
+			this.canvas.style.cursor = cursor;
+		});
 	}
 }

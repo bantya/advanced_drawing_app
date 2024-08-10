@@ -122,7 +122,6 @@ class Gizmo {
 			}
 
 			// Preserve aspect ratio if shift key is held
-			// region shift key preserve ratio
 			if (
 				e.shiftKey &&
 				[
@@ -139,7 +138,6 @@ class Gizmo {
 				);
 			}
 
-			// endregion
 			for (let i = 0; i < selectedShapes.length; i++) {
 				const shape = selectedShapes[i];
 				const oldBox = oldBoxes[i];

@@ -87,3 +87,12 @@ function getAngleBetweenVectors(A, B) {
 function getSignedAngleBetweenVectors(A, B) {
 	return Math.atan2(A.y, A.x) - Math.atan2(B.y, B.x);
 }
+
+function isMouseOverItem(mouseX, mouseY, itemX, itemY, width, height) {
+	return (
+		mouseX > itemX &&
+		mouseX < itemX + width &&
+		mouseY > itemY &&
+		mouseY < itemY + height
+	);
+}

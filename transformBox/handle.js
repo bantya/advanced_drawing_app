@@ -17,9 +17,30 @@ class Handle {
       this.rotation = rotation;
    }
 
+   static getCursor(type) {
+		switch (type) {
+			case Handle.TOP:
+         case Handle.BOTTOM:
+				return Cursor.MOVE_NS;
+			case Handle.RIGHT:
+         case Handle.LEFT:
+				return Cursor.MOVE_EW;
+			case Handle.TOP_RIGHT:
+         case Handle.BOTTOM_LEFT:
+				return Cursor.MOVE_NESW;
+			case Handle.TOP_LEFT:
+         case Handle.BOTTOM_RIGHT:
+				return Cursor.MOVE_NWSE;
+			case Handle.ROTATE:
+				return Cursor.ROTATE;
+			default:
+				return Cursor.DEFAULT;
+		}
+   }
+
    draw(ctx, hitRegion = false) {
       const size = Handle.size / viewport.zoom;
-      ctx.fillStyle = hitRegion ? Shape.getHitRGB(this.id) : "black";;
+      ctx.fillStyle = hitRegion ? Shape.getHitRGB(this.id) : "black";
       ctx.strokeStyle = "white";
       if (this.center) {
 			ctx.translate(this.center.x, this.center.y);
