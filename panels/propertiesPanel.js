@@ -62,8 +62,10 @@ class PropertiesPanel {
 		);
 		transformSection.appendChild(
 			createInputWithLabel("Rotation", {
-				type: "number",
-				onchange: "PropertiesPanel.setRotation(this.value)",
+				type: "input",
+				onblur: "PropertiesPanel.setRotation(this.value)",
+				onchange: "PropertiesPanel.setRotation(this.value, true)",
+				onfocus: "PropertiesPanel.setRotation(this.value, true)",
 				id: "rotationInput",
 			})
 		);
@@ -228,14 +230,18 @@ class PropertiesPanel {
 		viewport.drawShapes(shapes);
 	}
 
-	static setRotation(value) {
+	static setRotation(value, isFocus = false) {
+		value = Number(value.replace(/[^\d.-]+/, ""));
 		const newValue = value % 360;
+
 		shapes
-			.filter((s) => s.selected)
-			.forEach((s) => {
-				s.setRotation(newValue);
-			});
-		setValue(rotationInput, newValue);
+		.filter((s) => s.selected)
+		.forEach((s) => {
+			s.setRotation(newValue);
+		});
+
+		setValue(rotationInput, isFocus ? newValue : `${newValue}°`);
+
 		HistoryTools.record(shapes);
 		viewport.drawShapes(shapes);
 	}
@@ -453,7 +459,7 @@ class PropertiesPanel {
 				? newProperties.strokeWidth
 				: "";
 			text.value = newProperties.text ? newProperties.text : "";
-			rotationInput.value = newProperties.rotationAngle ?? "";
+			rotationInput.value = `${newProperties.rotationAngle.toFixed(2)}°` ?? "";
 
 			const placeholderText = "Multiple Values";
 			xInput.placeholder = newProperties.x ? "" : placeholderText;
