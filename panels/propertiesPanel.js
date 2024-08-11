@@ -36,6 +36,7 @@ class PropertiesPanel {
 			createInputWithLabel("X", {
 				type: "number",
 				onchange: "PropertiesPanel.changeX(this.value)",
+				onfocus: "PropertiesPanel.selectText(this)",
 				id: "xInput",
 			})
 		);
@@ -43,6 +44,7 @@ class PropertiesPanel {
 			createInputWithLabel("Y", {
 				type: "number",
 				onchange: "PropertiesPanel.changeY(this.value)",
+				onfocus: "PropertiesPanel.selectText(this)",
 				id: "yInput",
 			})
 		);
@@ -50,6 +52,7 @@ class PropertiesPanel {
 			createInputWithLabel("Width", {
 				type: "number",
 				onchange: "PropertiesPanel.changeWidth(this.value)",
+				onfocus: "PropertiesPanel.selectText(this)",
 				id: "widthInput",
 			})
 		);
@@ -57,6 +60,7 @@ class PropertiesPanel {
 			createInputWithLabel("Height", {
 				type: "number",
 				onchange: "PropertiesPanel.changeHeight(this.value)",
+				onfocus: "PropertiesPanel.selectText(this)",
 				id: "heightInput",
 			})
 		);
@@ -141,6 +145,7 @@ class PropertiesPanel {
 			createInputWithLabel("", {
 				type: "number",
 				onchange: "PropertiesPanel.changeStrokeWidth(this.value)",
+				onfocus: "PropertiesPanel.selectText(this)",
 				oninput: "PropertiesPanel.previewStrokeWidth(this.value)",
 				id: "strokeWidth",
 			})
@@ -149,6 +154,7 @@ class PropertiesPanel {
 			createDOMElement("input", {
 				id: "text",
 				oninput: "PropertiesPanel.changeText(this.value)",
+				onfocus: "PropertiesPanel.selectText(this)",
 				title: "Stroke Width",
 				type: "text",
 				value: "TEST",
@@ -156,6 +162,10 @@ class PropertiesPanel {
 		);
 
 		PropertiesPanel.resetColors();
+	}
+
+	static selectText(element) {
+		element.select();
 	}
 
 	static changeX(value) {
@@ -240,7 +250,12 @@ class PropertiesPanel {
 			s.setRotation(newValue);
 		});
 
-		setValue(rotationInput, isFocus ? newValue : `${newValue}°`);
+		if (isFocus) {
+			setValue(rotationInput, newValue);
+			PropertiesPanel.selectText(rotationInput);
+		} else {
+			setValue(rotationInput, `${newValue}°`);
+		}
 
 		HistoryTools.record(shapes);
 		viewport.drawShapes(shapes);
