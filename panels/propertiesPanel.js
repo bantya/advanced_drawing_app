@@ -84,9 +84,9 @@ class PropertiesPanel {
 		);
 		colorSection.appendChild(
 			createDOMElement("input", {
-				id: "fill",
+				id: "toggleFill",
 				checked: true,
-				onchange: "PropertiesPanel.changeFill(this.checked)",
+				onchange: "PropertiesPanel.toggleFill(this.checked)",
 				title: "Fill",
 				type: "checkbox",
 			})
@@ -109,9 +109,9 @@ class PropertiesPanel {
 		);
 		colorSection.appendChild(
 			createDOMElement("input", {
-				id: "stroke",
+				id: "toggleStroke",
 				checked: true,
-				onchange: "PropertiesPanel.changeStroke(this.checked)",
+				onchange: "PropertiesPanel.toggleStroke(this.checked)",
 				title: "Stroke",
 				type: "checkbox",
 			})
@@ -125,14 +125,22 @@ class PropertiesPanel {
 		);
 		colorSection.appendChild(
 			createDOMElement("input", {
-				id: "strokeWidth",
+				id: "strokeWidthRange",
 				max: "100",
 				min: "1",
-				onchange: "PropertiesPanel.changeStrokeWidth(this.value)",
-				oninput: "PropertiesPanel.previewStrokeWidth(this.value)",
+				onchange: "PropertiesPanel.changeStrokeWidthRange(this.value)",
+				oninput: "PropertiesPanel.previewStrokeWidthRange(this.value)",
 				title: "Stroke Width",
 				type: "range",
 				value: "5",
+			})
+		);
+		colorSection.appendChild(
+			createInputWithLabel("", {
+				type: "number",
+				onchange: "PropertiesPanel.changeStrokeWidth(this.value)",
+				oninput: "PropertiesPanel.previewStrokeWidth(this.value)",
+				id: "strokeWidth",
 			})
 		);
 		textSection.appendChild(
@@ -220,7 +228,7 @@ class PropertiesPanel {
 		viewport.drawShapes(shapes);
 	}
 
-	static setRotation(value){
+	static setRotation(value) {
 		const newValue = value % 360;
 		shapes
 			.filter((s) => s.selected)
@@ -245,7 +253,7 @@ class PropertiesPanel {
 		HistoryTools.record(shapes);
 	}
 
-	static changeFill(value) {
+	static toggleFill(value) {
 		shapes.filter((s) => s.selected).forEach((s) => (s.options.fill = value));
 
 		HistoryTools.record(shapes);
@@ -265,26 +273,45 @@ class PropertiesPanel {
 		HistoryTools.record(shapes);
 	}
 
-	static changeStroke(value) {
+	static toggleStroke(value) {
 		shapes
 			.filter((s) => s.selected)
 			.forEach((s) => (s.options.stroke = value));
 
+		if (value) {
+			removeProperty(strokeWidthRange, "disabled");
+			removeProperty(strokeWidth, "disabled");
+		} else {
+			setProperty(strokeWidthRange, "disabled", "true");
+			setProperty(strokeWidth, "disabled", "true");
+		}
+
 		HistoryTools.record(shapes);
 		viewport.drawShapes(shapes);
 	}
 
-	static previewStrokeWidth(value) {
+	static previewStrokeWidthRange(value) {
 		shapes
 			.filter((s) => s.selected)
 			.forEach((s) => (s.options.strokeWidth = Number(value)));
 
+		setValue(strokeWidth, value);
+
 		viewport.drawShapes(shapes);
 	}
 
-	static changeStrokeWidth(value) {
-		PropertiesPanel.previewStrokeWidth(value);
+	static changeStrokeWidthRange(value) {
+		PropertiesPanel.previewStrokeWidthRange(value);
 		HistoryTools.record(shapes);
+	}
+
+	static previewStrokeWidth(value) {
+		PropertiesPanel.changeStrokeWidth(value);
+	}
+
+	static changeStrokeWidth(value) {
+		setValue(strokeWidthRange, value);
+		PropertiesPanel.previewStrokeWidthRange(value);
 	}
 
 	static changeText(value) {
@@ -332,9 +359,9 @@ class PropertiesPanel {
 		return {
 			fillColor: fillColor.value,
 			strokeColor: strokeColor.value,
-			fill: fill.checked,
-			stroke: stroke.checked,
-			strokeWidth: Number(strokeWidth.value),
+			fill: toggleFill.checked,
+			stroke: toggleStroke.checked,
+			strokeWidth: Number(strokeWidthRange.value),
 			lineCap: "round",
 			lineJoin: "round",
 		};
@@ -412,16 +439,21 @@ class PropertiesPanel {
 			fillColor.value = newProperties.fillColor
 				? newProperties.fillColor
 				: "";
-			fill.checked = newProperties.fill ? newProperties.fill : false;
+			toggleFill.checked = newProperties.fill ? newProperties.fill : false;
 			strokeColor.value = newProperties.strokeColor
 				? newProperties.strokeColor
 				: "";
-			stroke.checked = newProperties.stroke ? newProperties.stroke : false;
+			toggleStroke.checked = newProperties.stroke
+				? newProperties.stroke
+				: false;
 			strokeWidth.value = newProperties.strokeWidth
 				? newProperties.strokeWidth
 				: "";
+			strokeWidthRange.value = newProperties.strokeWidth
+				? newProperties.strokeWidth
+				: "";
 			text.value = newProperties.text ? newProperties.text : "";
-			rotationInput.value = newProperties.rotationAngle ?? '';
+			rotationInput.value = newProperties.rotationAngle ?? "";
 
 			const placeholderText = "Multiple Values";
 			xInput.placeholder = newProperties.x ? "" : placeholderText;
@@ -429,16 +461,21 @@ class PropertiesPanel {
 			widthInput.placeholder = newProperties.width ? "" : placeholderText;
 			heightInput.placeholder = newProperties.height ? "" : placeholderText;
 			fillColor.placeholder = newProperties.fillColor ? "" : placeholderText;
-			fill.placeholder = newProperties.fill ? "" : placeholderText;
+			toggleFill.placeholder = newProperties.fill ? "" : placeholderText;
 			strokeColor.placeholder = newProperties.strokeColor
 				? ""
 				: placeholderText;
-			stroke.placeholder = newProperties.stroke ? "" : placeholderText;
+			toggleStroke.placeholder = newProperties.stroke ? "" : placeholderText;
+			strokeWidthRange.placeholder = newProperties.strokeWidth
+				? ""
+				: placeholderText;
 			strokeWidth.placeholder = newProperties.strokeWidth
 				? ""
 				: placeholderText;
 			text.placeholder = newProperties.text ? "" : placeholderText;
-			rotationInput.placeholder = newProperties.rotationAngle ? '' : placeholderText
+			rotationInput.placeholder = newProperties.rotationAngle
+				? ""
+				: placeholderText;
 		}
 	}
 }

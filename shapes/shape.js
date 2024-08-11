@@ -35,7 +35,7 @@ class Shape {
 	}
 
 	rotateBy(angle) {
-      this.rotation +=angle;
+    this.rotation +=angle;
 	  this.rotation %= 360;
 	}
 

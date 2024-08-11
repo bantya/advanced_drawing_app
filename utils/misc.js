@@ -68,6 +68,16 @@ function setProperty(element, key, value) {
 	element.setAttribute(key, value);
 }
 
+/**
+ * Remove the property from the input element.
+ * @param {HTMLElement} element - The property input element
+ * @param {string} key - The element attribute
+ * @returns
+ */
+function removeProperty(element, key) {
+	element.removeAttribute(key);
+}
+
 function getNumericValue(element) {
 	return Number(element.value);
 }
