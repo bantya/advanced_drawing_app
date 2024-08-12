@@ -97,3 +97,21 @@ function getAngleBetweenVectors(A, B) {
 function getSignedAngleBetweenVectors(A, B) {
 	return Math.atan2(A.y, A.x) - Math.atan2(B.y, B.x);
 }
+
+/**
+ * Dynamically fire given event.
+ * @param {HTMLElement} element - The element
+ * @param {string} event - The event to be fired
+ */
+function fireEvent(element, event) {
+	if (typeof Event === 'function') {
+		let evt = new Event(event, { bubbles: false, cancelable: true });
+		element.dispatchEvent(evt);
+	} else if ("createEvent" in document) {
+		let evt = document.createEvent("HTMLEvents");
+		evt.initEvent("change", false, true);
+		element.dispatchEvent(evt);
+	} else {
+		element.fireEvent(`on${event}`);
+	}
+}

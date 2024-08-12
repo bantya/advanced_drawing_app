@@ -37,6 +37,7 @@ class PropertiesPanel {
 				type: "number",
 				onchange: "PropertiesPanel.changeX(this.value)",
 				onfocus: "PropertiesPanel.selectText(this)",
+				onwheel: "PropertiesPanel.changeValue(event)",
 				id: "xInput",
 			})
 		);
@@ -45,6 +46,7 @@ class PropertiesPanel {
 				type: "number",
 				onchange: "PropertiesPanel.changeY(this.value)",
 				onfocus: "PropertiesPanel.selectText(this)",
+				onwheel: "PropertiesPanel.changeValue(event)",
 				id: "yInput",
 			})
 		);
@@ -53,6 +55,7 @@ class PropertiesPanel {
 				type: "number",
 				onchange: "PropertiesPanel.changeWidth(this.value)",
 				onfocus: "PropertiesPanel.selectText(this)",
+				onwheel: "PropertiesPanel.changeValue(event)",
 				id: "widthInput",
 			})
 		);
@@ -61,6 +64,7 @@ class PropertiesPanel {
 				type: "number",
 				onchange: "PropertiesPanel.changeHeight(this.value)",
 				onfocus: "PropertiesPanel.selectText(this)",
+				onwheel: "PropertiesPanel.changeValue(event)",
 				id: "heightInput",
 			})
 		);
@@ -70,6 +74,7 @@ class PropertiesPanel {
 				onblur: "PropertiesPanel.setRotation(this.value)",
 				onchange: "PropertiesPanel.setRotation(this.value, true)",
 				onfocus: "PropertiesPanel.setRotation(this.value, true)",
+				onwheel: "PropertiesPanel.changeValue(event)",
 				id: "rotationInput",
 			})
 		);
@@ -146,6 +151,7 @@ class PropertiesPanel {
 				type: "number",
 				onchange: "PropertiesPanel.changeStrokeWidth(this.value)",
 				onfocus: "PropertiesPanel.selectText(this)",
+				onwheel: "PropertiesPanel.changeValue(event)",
 				oninput: "PropertiesPanel.previewStrokeWidth(this.value)",
 				id: "strokeWidth",
 			})
@@ -166,6 +172,25 @@ class PropertiesPanel {
 
 	static selectText(element) {
 		element.select();
+	}
+
+	static changeValue(event) {
+		event.preventDefault();
+
+		const element = event.target;
+		let value = Number(getValue(element).replace(/[^\d.-]+/, ""));
+
+		if (event.shiftKey) {
+			value += Math.sign(event.deltaX) * -10;
+		} else if (event.altKey) {
+			value += parseFloat(Math.sign(event.deltaY) * -0.1);
+			value = value.toFixed(2);
+		} else {
+			value += Math.sign(event.deltaY) * -1;
+		}
+
+		setValue(element, value);
+		fireEvent(element, 'change');
 	}
 
 	static changeX(value) {
@@ -245,10 +270,10 @@ class PropertiesPanel {
 		const newValue = value % 360;
 
 		shapes
-		.filter((s) => s.selected)
-		.forEach((s) => {
-			s.setRotation(newValue);
-		});
+			.filter((s) => s.selected)
+			.forEach((s) => {
+				s.setRotation(newValue);
+			});
 
 		if (isFocus) {
 			setValue(rotationInput, newValue);
