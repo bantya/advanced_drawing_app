@@ -3,6 +3,7 @@ function getSize(points) {
 	const minY = Math.min(...points.map((p) => p.y));
 	const maxX = Math.max(...points.map((p) => p.x));
 	const maxY = Math.max(...points.map((p) => p.y));
+
 	return {
 		width: maxX - minX,
 		height: maxY - minY,
@@ -17,14 +18,44 @@ function getSize(points) {
  */
 function createDOMElement(type, attributes, text) {
 	const element = document.createElement(type);
+	const defaultClasses = {
+		button: new Set(["property-field", "property-button"]),
+		checkbox: new Set(["property-field", "property-checkbox"]),
+		color: new Set(["property-field", "property-color"]),
+		input: new Set(["property-field", "property-input"]),
+		number: new Set(["property-field", "property-number"]),
+		radio: new Set(["property-field", "property-radio"]),
+		range: new Set(["property-field", "property-range"]),
+		text: new Set(["property-field", "property-text"]),
+	};
+
 	if (text) {
 		element.innerText = text;
 	}
+
 	if (attributes) {
+		let classes = defaultClasses[attributes.type || type] || new Set();
+
 		Object.entries(attributes).forEach(([key, value]) => {
-			element.setAttribute(key, value);
+			if (key === "data") {
+				for (const [dataKey, dataValue] of Object.entries(value)) {
+					element.dataset[dataKey] = dataValue;
+				}
+			} else if (key !== "class") {
+				element.setAttribute(key, value);
+			}
 		});
+
+		// Handles class attributes separately, this facilitates:
+		// 1. defining input type specific default classes and
+		// 2. adding custom classes (classes that can be added via attributes)
+		if (attributes.class) {
+			classes = new Set([...classes, ...attributes.class.split(" ")]);
+		}
+
+		element.setAttribute("class", [...classes].join(" "));
 	}
+
 	return element;
 }
 
@@ -35,8 +66,13 @@ function createDOMElement(type, attributes, text) {
  */
 function createInputWithLabel(labelText, attributes) {
 	const element = document.createElement("div");
+
 	element.appendChild(
-		createDOMElement("label", { for: attributes["id"] || labelText.toLowerCase() }, `${labelText}: `)
+		createDOMElement(
+			"label",
+			{ for: attributes["id"] || labelText.toLowerCase() },
+			`${labelText}: `
+		)
 	);
 	element.appendChild(
 		createDOMElement("input", {
@@ -45,6 +81,7 @@ function createInputWithLabel(labelText, attributes) {
 			...attributes,
 		})
 	);
+
 	return element;
 }
 
@@ -106,9 +143,11 @@ function getSignedAngleBetweenVectors(A, B) {
 function fireEvent(element, event) {
 	if (typeof Event === "function") {
 		let evt = new Event(event, { bubbles: false, cancelable: true });
+
 		element.dispatchEvent(evt);
 	} else if ("createEvent" in document) {
 		let evt = document.createEvent("HTMLEvents");
+
 		evt.initEvent("change", false, true);
 		element.dispatchEvent(evt);
 	} else {

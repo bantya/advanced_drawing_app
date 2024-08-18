@@ -9,7 +9,7 @@ class PropertiesPanel {
 
 		const panelBodyDiv = createDOMElement("div", {
 			class: "panel-body",
-			["data-title"]: "Properties",
+			data: { title: "Properties" },
 		});
 
 		this.holderDiv.appendChild(panelHeaderDiv);
@@ -17,15 +17,15 @@ class PropertiesPanel {
 
 		const transformSection = createDOMElement("div", {
 			class: "panel-section",
-			["data-title"]: "Transform",
+			data: { title: "Transform" },
 		});
 		const colorSection = createDOMElement("div", {
 			class: "panel-section grid",
-			["data-title"]: "Color",
+			data: { title: "Color" },
 		});
 		const textSection = createDOMElement("div", {
 			class: "panel-section grid",
-			["data-title"]: "Text",
+			data: { title: "Text" },
 		});
 
 		panelBodyDiv.appendChild(transformSection);
@@ -35,47 +35,48 @@ class PropertiesPanel {
 		transformSection.appendChild(
 			createInputWithLabel("X", {
 				type: "number",
+				id: "xInput",
 				onchange: "PropertiesPanel.changeX(this.value)",
 				onfocus: "PropertiesPanel.selectText(this)",
 				onwheel: "PropertiesPanel.changeValue(event)",
-				id: "xInput",
 			})
 		);
 		transformSection.appendChild(
 			createInputWithLabel("Y", {
 				type: "number",
+				id: "yInput",
 				onchange: "PropertiesPanel.changeY(this.value)",
 				onfocus: "PropertiesPanel.selectText(this)",
 				onwheel: "PropertiesPanel.changeValue(event)",
-				id: "yInput",
 			})
 		);
 		transformSection.appendChild(
 			createInputWithLabel("Width", {
 				type: "number",
+				id: "widthInput",
 				onchange: "PropertiesPanel.changeWidth(this.value)",
 				onfocus: "PropertiesPanel.selectText(this)",
 				onwheel: "PropertiesPanel.changeValue(event)",
-				id: "widthInput",
 			})
 		);
 		transformSection.appendChild(
 			createInputWithLabel("Height", {
 				type: "number",
+				id: "heightInput",
 				onchange: "PropertiesPanel.changeHeight(this.value)",
 				onfocus: "PropertiesPanel.selectText(this)",
 				onwheel: "PropertiesPanel.changeValue(event)",
-				id: "heightInput",
 			})
 		);
 		transformSection.appendChild(
 			createInputWithLabel("Rotation", {
 				type: "input",
+				id: "rotationInput",
+				class: "property-number",
 				onblur: "PropertiesPanel.setRotation(this.value)",
 				onchange: "PropertiesPanel.setRotation(this.value, true)",
 				onfocus: "PropertiesPanel.setRotation(this.value, true)",
 				onwheel: "PropertiesPanel.changeValue(event)",
-				id: "rotationInput",
 			})
 		);
 		transformSection.appendChild(
@@ -95,17 +96,20 @@ class PropertiesPanel {
 		);
 		colorSection.appendChild(
 			createDOMElement("input", {
+				type: "checkbox",
 				id: "toggleFill",
 				checked: true,
 				onchange: "PropertiesPanel.toggleFill(this.checked)",
 				title: "Fill",
-				type: "checkbox",
 			})
 		);
 		colorSection.appendChild(
 			createDOMElement(
 				"button",
-				{ id: "resetBtn", onclick: "PropertiesPanel.resetColors()" },
+				{
+					id: "resetBtn",
+					onclick: "PropertiesPanel.resetColors()",
+				},
 				"Reset"
 			)
 		);
@@ -120,50 +124,55 @@ class PropertiesPanel {
 		);
 		colorSection.appendChild(
 			createDOMElement("input", {
+				type: "checkbox",
 				id: "toggleStroke",
 				checked: true,
 				onchange: "PropertiesPanel.toggleStroke(this.checked)",
 				title: "Stroke",
-				type: "checkbox",
 			})
 		);
 		colorSection.appendChild(
 			createDOMElement(
 				"button",
-				{ id: "swapBtn", onclick: "PropertiesPanel.swapColors()" },
+				{
+					id: "swapBtn",
+					onclick: "PropertiesPanel.swapColors()",
+				},
 				"Swap"
 			)
 		);
 		colorSection.appendChild(
 			createDOMElement("input", {
+				type: "range",
 				id: "strokeWidthRange",
-				max: "100",
-				min: "1",
+				max: 100,
+				min: 1,
+				value: 1,
 				onchange: "PropertiesPanel.changeStrokeWidthRange(this.value)",
 				oninput: "PropertiesPanel.previewStrokeWidthRange(this.value)",
 				title: "Stroke Width",
-				type: "range",
-				value: "5",
 			})
 		);
 		colorSection.appendChild(
-			createInputWithLabel("", {
+			createDOMElement("input", {
 				type: "number",
+				id: "strokeWidth",
+				data: { min: 1, max: 100 },
 				onchange: "PropertiesPanel.changeStrokeWidth(this.value)",
 				onfocus: "PropertiesPanel.selectText(this)",
-				onwheel: "PropertiesPanel.changeValue(event)",
 				oninput: "PropertiesPanel.previewStrokeWidth(this.value)",
-				id: "strokeWidth",
+				onwheel: "PropertiesPanel.changeValue(event)",
+				title: "Stroke Width",
 			})
 		);
 		textSection.appendChild(
 			createDOMElement("input", {
-				id: "text",
-				oninput: "PropertiesPanel.changeText(this.value)",
-				onfocus: "PropertiesPanel.selectText(this)",
-				title: "Stroke Width",
 				type: "text",
+				id: "text",
 				value: "TEST",
+				onfocus: "PropertiesPanel.selectText(this)",
+				oninput: "PropertiesPanel.changeText(this.value)",
+				title: "Text",
 			})
 		);
 
@@ -178,6 +187,8 @@ class PropertiesPanel {
 		event.preventDefault();
 
 		const element = event.target;
+		const minValue = element.dataset["min"];
+		const maxValue = element.dataset["max"];
 
 		if (getValue(element) === "") {
 			throw new Error("No value to update!");
@@ -191,6 +202,10 @@ class PropertiesPanel {
 			value += Math.sign(event.deltaY) * -0.1;
 		} else {
 			value += Math.sign(event.deltaY) * -1;
+		}
+
+		if (minValue && maxValue) {
+			value = Math.min(Math.max(value, minValue), maxValue);
 		}
 
 		value = preciseFloat(value);

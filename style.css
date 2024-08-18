@@ -192,6 +192,10 @@ textarea {
 	background-color: var(--bg-canvas);
 }
 
+.property-number:hover {
+	cursor: ew-resize;
+}
+
 #menuBar {
 	height: var(--menu-height);
 	position: relative;
