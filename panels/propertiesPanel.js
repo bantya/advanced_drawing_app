@@ -178,19 +178,25 @@ class PropertiesPanel {
 		event.preventDefault();
 
 		const element = event.target;
+
+		if (getValue(element) === "") {
+			throw new Error("No value to update!");
+		}
+
 		let value = Number(getValue(element).replace(/[^\d.-]+/, ""));
 
 		if (event.shiftKey) {
 			value += Math.sign(event.deltaX) * -10;
 		} else if (event.altKey) {
-			value += parseFloat(Math.sign(event.deltaY) * -0.1);
-			value = value.toFixed(2);
+			value += Math.sign(event.deltaY) * -0.1;
 		} else {
 			value += Math.sign(event.deltaY) * -1;
 		}
 
+		value = preciseFloat(value);
+
 		setValue(element, value);
-		fireEvent(element, 'change');
+		fireEvent(element, "change");
 	}
 
 	static changeX(value) {
@@ -229,9 +235,9 @@ class PropertiesPanel {
 				s.setSize(newWidth, newHeight);
 			});
 
-		setValue(widthInput, Math.round(newWidth));
+		setValue(widthInput, preciseFloat(newWidth));
 		if (getValue(heightInput) != "") {
-			setValue(heightInput, Math.round(newHeight));
+			setValue(heightInput, preciseFloat(newHeight));
 		}
 
 		HistoryTools.record(shapes);
@@ -256,9 +262,9 @@ class PropertiesPanel {
 				s.setSize(newWidth, newHeight);
 			});
 
-		setValue(heightInput, Math.round(newHeight));
+		setValue(heightInput, preciseFloat(newHeight));
 		if (getValue(widthInput) != "") {
-			setValue(widthInput, Math.round(newWidth));
+			setValue(widthInput, preciseFloat(newWidth));
 		}
 
 		HistoryTools.record(shapes);
@@ -393,6 +399,9 @@ class PropertiesPanel {
 		yInput.value = "";
 		widthInput.value = "";
 		heightInput.value = "";
+		constrainDimensions.checked = false;
+		toggleFill.checked = true;
+		toggleStroke.checked = true;
 		text.value = "";
 		xInput.placeholder = "";
 		yInput.placeholder = "";
@@ -499,7 +508,8 @@ class PropertiesPanel {
 				? newProperties.strokeWidth
 				: "";
 			text.value = newProperties.text ? newProperties.text : "";
-			rotationInput.value = `${newProperties.rotationAngle.toFixed(2)}°` ?? "";
+			rotationInput.value =
+				`${Math.round(newProperties.rotationAngle)}°` ?? "";
 
 			const placeholderText = "Multiple Values";
 			xInput.placeholder = newProperties.x ? "" : placeholderText;
@@ -507,11 +517,9 @@ class PropertiesPanel {
 			widthInput.placeholder = newProperties.width ? "" : placeholderText;
 			heightInput.placeholder = newProperties.height ? "" : placeholderText;
 			fillColor.placeholder = newProperties.fillColor ? "" : placeholderText;
-			toggleFill.placeholder = newProperties.fill ? "" : placeholderText;
 			strokeColor.placeholder = newProperties.strokeColor
 				? ""
 				: placeholderText;
-			toggleStroke.placeholder = newProperties.stroke ? "" : placeholderText;
 			strokeWidthRange.placeholder = newProperties.strokeWidth
 				? ""
 				: placeholderText;

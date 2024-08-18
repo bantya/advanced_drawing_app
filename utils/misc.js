@@ -104,7 +104,7 @@ function getSignedAngleBetweenVectors(A, B) {
  * @param {string} event - The event to be fired
  */
 function fireEvent(element, event) {
-	if (typeof Event === 'function') {
+	if (typeof Event === "function") {
 		let evt = new Event(event, { bubbles: false, cancelable: true });
 		element.dispatchEvent(evt);
 	} else if ("createEvent" in document) {
@@ -114,4 +114,27 @@ function fireEvent(element, event) {
 	} else {
 		element.fireEvent(`on${event}`);
 	}
+}
+
+/**
+ * Check if the given number is a float.
+ * @param {number} num - The number to be checked
+ * @returns boolean
+ */
+function isFloat(num) {
+	return !isNaN(num) && parseFloat(num) == num && num % 1 !== 0;
+}
+
+/**
+ * Adjust the decimal points of the given number if it's a float.
+ * @param {number} num - The number to be checked
+ * @param {number} precision - Number of decimal points to be adjusted
+ * @returns number
+ */
+function preciseFloat(num, precision = FLOAT_PRECISION) {
+	if (!isFloat(num)) {
+		return num;
+	}
+
+	return num.toFixed(precision);
 }
