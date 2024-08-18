@@ -184,6 +184,10 @@ class PropertiesPanel {
 	}
 
 	static changeValue(event) {
+		if (!feature.wheel_adjustment.ENABLED) {
+			return;
+		}
+
 		event.preventDefault();
 
 		const element = event.target;
@@ -198,7 +202,7 @@ class PropertiesPanel {
 
 		if (event.shiftKey) {
 			value += Math.sign(event.deltaX) * -10;
-		} else if (event.altKey) {
+		} else if (event.altKey && feature.wheel_adjustment.ENABLED_ALT) {
 			value += Math.sign(event.deltaY) * -0.1;
 		} else {
 			value += Math.sign(event.deltaY) * -1;
