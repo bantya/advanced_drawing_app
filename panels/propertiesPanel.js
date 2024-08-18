@@ -227,19 +227,21 @@ class PropertiesPanel {
 				const currentWidth = s.size.width;
 				const currentHeight = s.size.height;
 				newHeight = currentHeight;
+
 				if (constrainDimensions.checked) {
 					const aspectRatio = currentWidth / currentHeight;
 					const constrainedHeight = newWidth / aspectRatio;
 					newHeight = constrainedHeight;
+
+					if (getValue(heightInput) != "") {
+						setValue(heightInput, preciseFloat(newHeight));
+					}
 				}
+
 				s.setSize(newWidth, newHeight);
 			});
 
 		setValue(widthInput, preciseFloat(newWidth));
-		if (getValue(heightInput) != "") {
-			setValue(heightInput, preciseFloat(newHeight));
-		}
-
 		HistoryTools.record(shapes);
 		viewport.drawShapes(shapes);
 	}
@@ -254,19 +256,21 @@ class PropertiesPanel {
 				const currentWidth = s.size.width;
 				const currentHeight = s.size.height;
 				newWidth = currentWidth;
+
 				if (constrainDimensions.checked) {
 					const aspectRatio = currentWidth / currentHeight;
 					const constrainedWidth = newHeight * aspectRatio;
 					newWidth = constrainedWidth;
+
+					if (getValue(widthInput) != "") {
+						setValue(widthInput, preciseFloat(newWidth));
+					}
 				}
+
 				s.setSize(newWidth, newHeight);
 			});
 
 		setValue(heightInput, preciseFloat(newHeight));
-		if (getValue(widthInput) != "") {
-			setValue(widthInput, preciseFloat(newWidth));
-		}
-
 		HistoryTools.record(shapes);
 		viewport.drawShapes(shapes);
 	}
